@@ -6,6 +6,9 @@ class Post(models.Model):
     description_short = models.CharField(max_length=255)
     description_long = models.TextField()
 
+    def __str__(self):
+        return self.title
+
 
 
 
