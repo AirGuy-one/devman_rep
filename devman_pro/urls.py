@@ -4,26 +4,23 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
-
-
-def show_phones(request):
-    return render(request, 'index.html')
+from places_app import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', show_phones),
+    path('', views.index, name='home'),
 ]
 
 
 urlpatterns += [
-     path('catalog/', include('places_app.urls')),
+     path('', include('places_app.urls')),
 ]
 
 
-urlpatterns += [
-    path('', RedirectView.as_view(url='/catalog/', permanent=True)),
-]
+# urlpatterns += [
+#     path('', RedirectView.as_view(url='', permanent=True)),
+# ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
