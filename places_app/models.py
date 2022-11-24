@@ -12,8 +12,8 @@ class Post(models.Model):
         return f'{self.id} {self.title}'
 
     class Meta:
-        verbose_name = 'Post'
-        verbose_name_plural = 'Posts'
+        verbose_name = 'Локация'
+        verbose_name_plural = 'Локации'
 
 
 class Images(models.Model):
@@ -24,8 +24,8 @@ class Images(models.Model):
         return f'Image {self.id} - {self.image.name}'
 
     class Meta:
-        verbose_name = 'Image'
-        verbose_name_plural = 'Images'
+        verbose_name = 'Картинка'
+        verbose_name_plural = 'Картинки'
 
 
 
