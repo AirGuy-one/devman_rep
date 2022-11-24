@@ -8,7 +8,17 @@ class ImagesAdmin(admin.ModelAdmin):
     ordering = ('-id',)
 
 
-admin.site.register(Post)
+class ImagesInline(admin.TabularInline):
+    model = Images
+
+
+class PostAdmin(admin.ModelAdmin):
+    inlines = [
+        ImagesInline,
+    ]
+
+
+admin.site.register(Post, PostAdmin)
 admin.site.register(Images, ImagesAdmin)
 
 
