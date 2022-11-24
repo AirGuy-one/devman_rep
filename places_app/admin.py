@@ -1,21 +1,21 @@
-import csv
-import math
-
 from django.contrib import admin
+from django.contrib.admin.options import InlineModelAdmin
 from django.http import HttpResponse
-from django.utils.html import format_html_join
+from django.utils.html import format_html_join, format_html
 from django.utils.safestring import mark_safe
+from adminsortable2.admin import SortableAdminMixin, SortableTabularInline, SortableInlineAdminMixin
 
 from .models import Post, Images
 
 
-class ImagesAdmin(admin.ModelAdmin):
+class ImagesAdmin(SortableAdminMixin, admin.ModelAdmin):
     model = Images
     extra = 0
     ordering = ('-id', )
 
 
 class ImagesInline(admin.TabularInline):
+
     model = Images
 
     readonly_fields = ["display_image_field", ]
@@ -23,7 +23,7 @@ class ImagesInline(admin.TabularInline):
     def display_image_field(self, obj):
         new_width = 200 * obj.image.width / obj.image.height
 
-        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+        return format_html('<img src="{url}" width="{width}" height={height} />'.format(
             url=obj.image.url,
             width=new_width,
             height=200,
@@ -31,7 +31,7 @@ class ImagesInline(admin.TabularInline):
         )
 
 
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(SortableAdminMixin, admin.ModelAdmin):
 
     inlines = [
         ImagesInline,

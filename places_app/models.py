@@ -1,10 +1,11 @@
 from django.db import models
+from tinymce.models import HTMLField
 
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
     description_short = models.CharField(max_length=255)
-    description_long = models.TextField()
+    description_long = HTMLField()
     x = models.DecimalField(max_digits=20, decimal_places=14, null=True)
     y = models.DecimalField(max_digits=20, decimal_places=14, null=True)
 
@@ -14,6 +15,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'Локация'
         verbose_name_plural = 'Локации'
+        ordering = ['id']
 
 
 class Images(models.Model):
@@ -26,6 +28,7 @@ class Images(models.Model):
     class Meta:
         verbose_name = 'Картинка'
         verbose_name_plural = 'Картинки'
+        ordering = ['id']
 
 
 

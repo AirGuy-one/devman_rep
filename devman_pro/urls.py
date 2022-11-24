@@ -14,13 +14,9 @@ urlpatterns = [
 
 
 urlpatterns += [
-     path('', include('places_app.urls')),
+    path('', include('places_app.urls')),
 ]
 
-
-# urlpatterns += [
-#     path('', RedirectView.as_view(url='', permanent=True)),
-# ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
