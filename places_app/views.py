@@ -11,6 +11,11 @@ def index(request):
 
     json_convert_file = {}
 
+    json_for_html = {
+        "type": "FeatureCollection",
+        "features": []
+    }
+
     for post in posts:
         """Here we add json files to folder places"""
         json_convert_file['title'] = str(post.title)
@@ -31,12 +36,32 @@ def index(request):
         with open(f'static/places/{post.id}_json_data.json', 'w') as f:
             f.write(json_tmp)
 
+        """Here we writing json to html template"""
+        adding = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [float(post.x), float(post.y)]
+            },
+            "properties": {
+                "title": f'{post.title}',
+                "placeId": f'id_is_{post.id}',
+                "detailsUrl": "static/places/" + f"{post.id}" + "_json_data.json"
+            }
+        }
+
+        json_for_html['features'].append(adding)
+
+    # json_final = json.dumps(json_for_html, indent=4)
+    json_final = json_for_html
+
     last = Post.objects.last()
 
     context = {
         'posts': posts,
         'images': images,
-        'last': last
+        'last': last,
+        'json_final': json_final,
     }
 
     return render(request, 'index.html', context=context)
