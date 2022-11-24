@@ -1,8 +1,16 @@
-from django.http import HttpResponse
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import Post, Images
 from django.shortcuts import get_object_or_404
 import json
+
+
+class PlacesJsonResponse(JsonResponse):
+    def __init__(self, data, encoder=DjangoJSONEncoder, safe=True, **kwargs):
+        json_dumps_params = dict(ensure_ascii=False)
+        json_dumps_params['indent'] = 2
+        super().__init__(data, encoder, safe, json_dumps_params, **kwargs)
 
 
 def index(request):
@@ -31,7 +39,7 @@ def index(request):
             "lat": float(post.y)
         }
 
-        json_tmp = json.dumps(json_convert_file, indent=4)
+        json_tmp = json.dumps(json_convert_file, indent=4, ensure_ascii=False)
 
         with open(f'static/places/{post.id}_json_data.json', 'w') as f:
             f.write(json_tmp)
@@ -68,9 +76,13 @@ def index(request):
 
 
 def api(request, pk):
-    title_of_post = get_object_or_404(Post, pk=pk)
+    post = get_object_or_404(Post, pk=pk)
 
-    return HttpResponse(f'{title_of_post}')
+    with open(f'static/places/{post.id}_json_data.json') as f:
+        response_data = json.load(f)
+
+    return PlacesJsonResponse(response_data)
+
 
 
 
