@@ -3,7 +3,7 @@ from django.contrib.admin.options import InlineModelAdmin
 from django.http import HttpResponse
 from django.utils.html import format_html_join, format_html
 from django.utils.safestring import mark_safe
-from adminsortable2.admin import SortableAdminMixin, SortableTabularInline, SortableInlineAdminMixin
+from adminsortable2.admin import SortableAdminMixin, SortableTabularInline
 
 from .models import Post, Images
 
@@ -14,7 +14,7 @@ class ImagesAdmin(SortableAdminMixin, admin.ModelAdmin):
     ordering = ('-id', )
 
 
-class ImagesInline(admin.TabularInline):
+class ImagesInline(SortableTabularInline):
 
     model = Images
 
