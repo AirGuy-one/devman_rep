@@ -14,7 +14,7 @@ class ImagesAdmin(SortableAdminMixin, admin.ModelAdmin):
     ordering = ('-id', )
 
 
-class ImagesInline(SortableTabularInline):
+class ImagesInline(admin.TabularInline):
 
     model = Images
 
