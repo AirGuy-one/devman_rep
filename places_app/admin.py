@@ -11,10 +11,21 @@ from .models import Post, Images
 class ImagesAdmin(SortableAdminMixin, admin.ModelAdmin):
     model = Images
     extra = 0
-    ordering = ('-id', )
+    list_display = ('number', 'id', 'display_image_field', 'post')
+    ordering = ('number', )
+
+    def display_image_field(self, obj):
+        new_width = 200 * obj.image.width / obj.image.height
+
+        return format_html('<img src="{url}" width="{width}" height={height} />'.format(
+            url=obj.image.url,
+            width=new_width,
+            height=200,
+        )
+        )
 
 
-class ImagesInline(admin.TabularInline):
+class ImagesInline(SortableTabularInline):
 
     model = Images
 
