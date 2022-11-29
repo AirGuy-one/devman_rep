@@ -12,5 +12,5 @@
 * Запустить сервер локально, выпонив команду `python3 manage.py runserver`
 * Загрузить данные об интересных местах в бд через админку Django, написав после основного url >/admin
 
-Ссылка на пример json файла: [https://raw.githubusercontent.com/devmanorg/where-to-go-places/master/p>][1]
+Ссылка на пример json файла: [https://raw.githubusercontent.com/devmanorg/where-to-go-places/master/places/%D0%90%D0%BD%D1%82%D0%B8%D0%BA%D0%B0%D1%84%D0%B5%20Bizone.json]
 
