@@ -4,10 +4,10 @@ from tinymce.models import HTMLField
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
-    description_short = models.TextField()
-    description_long = HTMLField()
-    x = models.DecimalField(max_digits=20, decimal_places=14, null=True)
-    y = models.DecimalField(max_digits=20, decimal_places=14, null=True)
+    description_short = models.TextField(null=True, blank=True)
+    description_long = HTMLField(null=True, blank=True)
+    longitude = models.DecimalField(max_digits=20, decimal_places=14)
+    latitude = models.DecimalField(max_digits=20, decimal_places=14)
 
     def __str__(self):
         return f'{self.id} {self.title}'
@@ -20,8 +20,8 @@ class Post(models.Model):
 
 class Images(models.Model):
     image = models.ImageField(upload_to='images/')
-    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, null=True, blank=True)
-    number = models.IntegerField(null=True, blank=True)
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, null=True, blank=True, related_name='post')
+    number = models.IntegerField()
 
     def __str__(self):
         return f'Image {self.id} - {self.image.name}'
@@ -30,23 +30,3 @@ class Images(models.Model):
         verbose_name = 'Картинка'
         verbose_name_plural = 'Картинки'
         ordering = ['number']
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

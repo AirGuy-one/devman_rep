@@ -5,6 +5,7 @@ from .models import Post, Images
 from django.shortcuts import get_object_or_404
 import json
 import pathlib
+from environs import Env
 
 
 class PlacesJsonResponse(JsonResponse):
@@ -87,7 +88,3 @@ def api(request, pk):
         response_data = json.load(f)
 
     return PlacesJsonResponse(response_data)
-
-
-
-
