@@ -7,7 +7,6 @@ import json
 import pathlib
 from environs import Env
 
-
 class PlacesJsonResponse(JsonResponse):
     def __init__(self, data, encoder=DjangoJSONEncoder, safe=True, **kwargs):
         json_dumps_params = dict(ensure_ascii=False)
@@ -51,7 +50,7 @@ def index(request):
             "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": [float(post.x), float(post.y)]
+                "coordinates": [float(post.longitude), float(post.latitude)]
             },
             "properties": {
                 "title": f'{post.title}',
