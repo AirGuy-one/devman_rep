@@ -4,8 +4,8 @@ from tinymce.models import HTMLField
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
-    description_short = models.TextField(null=True, blank=True)
-    description_long = HTMLField(null=True, blank=True)
+    description_short = models.TextField(blank=True)
+    description_long = HTMLField(blank=True)
     longitude = models.DecimalField(max_digits=20, decimal_places=14)
     latitude = models.DecimalField(max_digits=20, decimal_places=14)
 
