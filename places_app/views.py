@@ -26,25 +26,6 @@ def index(request):
     }
 
     for post in posts:
-        """Here we add json files to folder places"""
-        # json_convert_file['title'] = str(post.title)
-
-        # json_convert_file['imgs'] = []
-        # for i in Images.objects.filter(post=Post.objects.get(pk=post.id)):
-        #     json_convert_file['imgs'].append("media/" + str(i.image))
-
-        # json_convert_file['description_short'] = str(post.description_short)
-        # json_convert_file['description_long'] = str(post.description_long)
-        # json_convert_file['coordinates'] = {
-        #     "lng": float(post.x),
-        #     "lat": float(post.y)
-        # }
-
-        # json_tmp = json.dumps(json_convert_file, indent=4, ensure_ascii=False)
-
-        # with open(f'static/places/{post.id}_json_data.json', 'w') as f:
-        #     f.write(json_tmp)
-
         """Here we writing json to html template"""
         adding = {
             "type": "Feature",

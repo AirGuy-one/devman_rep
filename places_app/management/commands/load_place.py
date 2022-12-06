@@ -17,13 +17,12 @@ class Command(BaseCommand):
         url_address = kwargs['json_file_address']
 
         r = requests.get(url_address)
-        # This is dict(parsed json file)
         data = r.json()
 
         """ Here we add the post to Post model """
         post = Post.objects.create(title=data['title'], description_short=data['description_short'],
-                            description_long=data['description_long'], x=data['coordinates']['lng'],
-                            y=data['coordinates']['lat'])
+                            description_long=data['description_long'], longitude=data['coordinates']['lng'],
+                            latitude=data['coordinates']['lat'])
 
         """ Here we add the photos to Image model """
         for i in data['imgs']:
@@ -47,8 +46,8 @@ class Command(BaseCommand):
         json_convert_file['description_short'] = str(post.description_short)
         json_convert_file['description_long'] = str(post.description_long)
         json_convert_file['coordinates'] = {
-            "lng": float(post.x),
-            "lat": float(post.y)
+            "lng": float(post.longitude),
+            "lat": float(post.latitude)
         }
 
         json_tmp = json.dumps(json_convert_file, indent=4, ensure_ascii=False)
