@@ -4,3 +4,4 @@ environs==9.5.0
 django-admin-sortable2==2.1.4
 django-tinymce==3.5.0
 Django==4.1.3
+Pillow==9.3.0
