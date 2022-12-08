@@ -1,4 +1,3 @@
-from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Post, Images
@@ -18,7 +17,7 @@ def index(request):
     }
 
     for post in posts:
-        """Here we writing json to html template"""
+        """ Here we writing json to html template """
         adding = {
             "type": "Feature",
             "geometry": {
