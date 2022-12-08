@@ -1,17 +1,9 @@
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Post, Images
-from django.shortcuts import get_object_or_404
 import json
 import pathlib
-from environs import Env
-
-class PlacesJsonResponse(JsonResponse):
-    def __init__(self, data, encoder=DjangoJSONEncoder, safe=True, **kwargs):
-        json_dumps_params = dict(ensure_ascii=False)
-        json_dumps_params['indent'] = 2
-        super().__init__(data, encoder, safe, json_dumps_params, **kwargs)
 
 
 def index(request):
@@ -67,4 +59,5 @@ def api(request, pk):
     with open(desired_dir) as f:
         response_data = json.load(f)
 
-    return PlacesJsonResponse(response_data)
+
+    return JsonResponse(response_data, json_dumps_params={'ensure_ascii': False, 'indent': 2})
