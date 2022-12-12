@@ -42,13 +42,18 @@ def index(request):
 
 def get_post_json(request, pk):
 
-    desired_dir = str(pathlib.Path(__file__).parent.parent.resolve())
-
     post = Post.objects.get(pk=pk)
 
-    desired_dir = desired_dir + f'/static/places/{post.id}_json_data.json'
-    with open(desired_dir) as f:
-        response_data = json.load(f)
+    json_post_info = {'title': str(post.title), 'imgs': []}
 
+    for i in Images.objects.filter(post=Post.objects.get(pk=post.id)):
+        json_post_info['imgs'].append("media/" + str(i.image))
 
-    return JsonResponse(response_data, json_dumps_params={'ensure_ascii': False, 'indent': 2})
+    json_post_info['description_short'] = str(post.description_short)
+    json_post_info['description_long'] = str(post.description_long)
+    json_post_info['coordinates'] = {
+        "lng": float(post.longitude),
+        "lat": float(post.latitude)
+    }
+
+    return JsonResponse(json_post_info, json_dumps_params={'ensure_ascii': False, 'indent': 2})
