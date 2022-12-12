@@ -16,7 +16,7 @@ def index(request):
 
     for post in posts:
         """ Here we writing json to html template """
-        adding = {
+        features_info = {
             "type": "Feature",
             "geometry": {
                 "type": "Point",
@@ -29,7 +29,7 @@ def index(request):
             }
         }
 
-        places_info['features'].append(adding)
+        places_info['features'].append(features_info)
 
     context = {
         'posts': posts,
