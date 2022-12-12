@@ -21,7 +21,7 @@ class Post(models.Model):
 class Images(models.Model):
     image = models.ImageField(upload_to='images/')
     post = models.ForeignKey(to=Post, on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
-    number = models.IntegerField(blank=True, null=True)
+    number = models.IntegerField(default=0)
 
     def __str__(self):
         return f'Image {self.id} - {self.image.name}'

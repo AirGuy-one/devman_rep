@@ -1,8 +1,10 @@
 import json
 import urllib.request
-
+import os
 import requests
 import shutil
+
+from pathlib import Path
 from django.core.management.base import BaseCommand
 from places_app.models import Post, Images
 
@@ -16,13 +18,25 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         url_address = kwargs['json_file_address']
 
+        """ Here we create auxiliary folders """
+        if not os.path.isdir('static'):
+            base_dir = Path(__file__).resolve().parent.parent.parent.parent
+            os.chdir(base_dir)
+            os.mkdir('static')
+            os.mkdir('media')
+            os.chdir(os.path.join(base_dir, 'media'))
+            os.mkdir('images')
+            os.chdir(os.path.join(base_dir, 'load_static'))
+            os.mkdir('places')
+            os.chdir('..')
+
         r = requests.get(url_address)
         data = r.json()
 
         """ Here we add the post to Post model """
         post = Post.objects.create(title=data['title'], description_short=data['description_short'],
-                            description_long=data['description_long'], longitude=data['coordinates']['lng'],
-                            latitude=data['coordinates']['lat'])
+                                   description_long=data['description_long'], longitude=data['coordinates']['lng'],
+                                   latitude=data['coordinates']['lat'])
 
         """ Here we add the photos to Image model """
         for i in data['imgs']:
@@ -40,8 +54,6 @@ class Command(BaseCommand):
 
         for i in Images.objects.filter(post=Post.objects.get(pk=post.id)):
             json_convert_file['imgs'].append("media/" + str(i.image))
-
-        print(Post.objects.get(pk=post.id))
 
         json_convert_file['description_short'] = str(post.description_short)
         json_convert_file['description_long'] = str(post.description_long)
