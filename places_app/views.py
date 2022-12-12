@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from .models import Post, Images
 import json
@@ -20,11 +20,11 @@ def index(request):
             "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": [float(post.longitude), float(post.latitude)]
+                "coordinates": [post.longitude, post.latitude]
             },
             "properties": {
-                "title": f'{post.title}',
-                "placeId": f'id_is_{post.id}',
+                "title": post.title,
+                "placeId": post.id,
                 "detailsUrl": "static/places/" + f"{post.id}" + "_json_data.json"
             }
         }
