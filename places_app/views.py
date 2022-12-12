@@ -9,9 +9,7 @@ def index(request):
     images = Images.objects.all()
     posts = Post.objects.all()
 
-    json_convert_file = {}
-
-    json_for_html = {
+    places_info = {
         "type": "FeatureCollection",
         "features": []
     }
@@ -31,18 +29,12 @@ def index(request):
             }
         }
 
-        json_for_html['features'].append(adding)
-
-    # json_final = json.dumps(json_for_html, indent=4)
-    json_final = json_for_html
-
-    last = Post.objects.last()
+        places_info['features'].append(adding)
 
     context = {
         'posts': posts,
         'images': images,
-        'last': last,
-        'json_final': json_final,
+        'json_final': places_info,
     }
 
     return render(request, 'index.html', context=context)
