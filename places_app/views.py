@@ -40,7 +40,7 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
-def api(request, pk):
+def get_post_json(request, pk):
 
     desired_dir = str(pathlib.Path(__file__).parent.parent.resolve())
 
