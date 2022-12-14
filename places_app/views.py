@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Post, Images
 
 
@@ -38,7 +38,7 @@ def index(request):
 
 def get_post_json(request, pk):
 
-    post = Post.objects.get(pk=pk)
+    post = get_object_or_404(Post, pk=pk)
 
     post_info = {'title': post.title, 'imgs': []}
 
