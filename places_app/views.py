@@ -42,7 +42,7 @@ def get_post_json(request, pk):
 
     post_info = {'title': post.title, 'imgs': []}
 
-    for i in Images.objects.filter(post=Post.objects.get(pk=post.id)):
+    for i in Post.objects.get(pk=pk).images.all():
         post_info['imgs'].append(i.image.url)
 
     post_info['description_short'] = post.description_short
