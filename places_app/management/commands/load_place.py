@@ -50,19 +50,17 @@ class Command(BaseCommand):
             Images.objects.create(image=f'images/{title_of_image}', post=post)
 
         """ Here we create json file in server folder """
-        json_convert_file = {'title': str(post.title), 'imgs': []}
+        convert_file = {'title': post.title,
+                        'imgs': [i.image.url for i in Post.objects.get(pk=post.id).images.all()],
+                        'description_short': post.description_short,
+                        'description_long': post.description_long,
+                        'coordinates': {
+                            "lng": post.longitude,
+                            "lat": post.latitude
+                        }
+                        }
 
-        for i in Images.objects.filter(post=Post.objects.get(pk=post.id)):
-            json_convert_file['imgs'].append("media/" + str(i.image))
-
-        json_convert_file['description_short'] = str(post.description_short)
-        json_convert_file['description_long'] = str(post.description_long)
-        json_convert_file['coordinates'] = {
-            "lng": float(post.longitude),
-            "lat": float(post.latitude)
-        }
-
-        json_tmp = json.dumps(json_convert_file, indent=4, ensure_ascii=False)
+        json_tmp = json.dumps(convert_file, indent=4, ensure_ascii=False)
 
         with open(f'load_static/places/{post.id}_json_data.json', 'w') as f:
             f.write(json_tmp)

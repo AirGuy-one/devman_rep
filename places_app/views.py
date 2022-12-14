@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Images
+from django.urls import reverse
+from .models import Post
 
 
 def index(request):
@@ -22,7 +23,7 @@ def index(request):
             "properties": {
                 "title": post.title,
                 "placeId": post.id,
-                "detailsUrl": "static/places/" + f"{post.id}" + "_json_data.json"
+                "detailsUrl": reverse(get_post_json, args=[post.id])
             }
         }
 
@@ -30,7 +31,7 @@ def index(request):
 
     context = {
         'posts': posts,
-        'json_final': places_info,
+        'places_info': places_info,
     }
 
     return render(request, 'index.html', context=context)
