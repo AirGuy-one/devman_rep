@@ -40,16 +40,16 @@ def get_post_json(request, pk):
 
     post = Post.objects.get(pk=pk)
 
-    post_info = {'title': str(post.title), 'imgs': []}
+    post_info = {'title': post.title, 'imgs': []}
 
     for i in Images.objects.filter(post=Post.objects.get(pk=post.id)):
-        post_info['imgs'].append("media/" + str(i.image))
+        post_info['imgs'].append(i.image.url)
 
-    post_info['description_short'] = str(post.description_short)
-    post_info['description_long'] = str(post.description_long)
+    post_info['description_short'] = post.description_short
+    post_info['description_long'] = post.description_long
     post_info['coordinates'] = {
-        "lng": float(post.longitude),
-        "lat": float(post.latitude)
+        "lng": post.longitude,
+        "lat": post.latitude
     }
 
     return JsonResponse(post_info, json_dumps_params={'ensure_ascii': False, 'indent': 2})

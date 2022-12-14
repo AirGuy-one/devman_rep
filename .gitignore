@@ -131,3 +131,7 @@ dmypy.json
 .idea
 
 SUMMARY.md
+
+load_static/places/
+media/
+static/
