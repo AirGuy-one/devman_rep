@@ -1,12 +1,9 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Post, Images
-import json
-import pathlib
 
 
 def index(request):
-    images = Images.objects.all()
     posts = Post.objects.all()
 
     places_info = {
@@ -33,7 +30,6 @@ def index(request):
 
     context = {
         'posts': posts,
-        'images': images,
         'json_final': places_info,
     }
 
@@ -44,16 +40,16 @@ def get_post_json(request, pk):
 
     post = Post.objects.get(pk=pk)
 
-    json_post_info = {'title': str(post.title), 'imgs': []}
+    post_info = {'title': str(post.title), 'imgs': []}
 
     for i in Images.objects.filter(post=Post.objects.get(pk=post.id)):
-        json_post_info['imgs'].append("media/" + str(i.image))
+        post_info['imgs'].append("media/" + str(i.image))
 
-    json_post_info['description_short'] = str(post.description_short)
-    json_post_info['description_long'] = str(post.description_long)
-    json_post_info['coordinates'] = {
+    post_info['description_short'] = str(post.description_short)
+    post_info['description_long'] = str(post.description_long)
+    post_info['coordinates'] = {
         "lng": float(post.longitude),
         "lat": float(post.latitude)
     }
 
-    return JsonResponse(json_post_info, json_dumps_params={'ensure_ascii': False, 'indent': 2})
+    return JsonResponse(post_info, json_dumps_params={'ensure_ascii': False, 'indent': 2})
