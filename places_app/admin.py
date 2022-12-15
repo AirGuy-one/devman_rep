@@ -31,11 +31,12 @@ class ImagesInline(SortableTabularInline):
     def display_image_field(self, obj):
         new_width = 200 * obj.image.width / obj.image.height
 
-        return format_html('<img src="{url}" width="{width}" height={height} />'.format(
-            url=obj.image.url,
-            width=new_width,
-            height=200,
-        )
+        return format_html(
+            '<img src="{url}" width="{width}" height={height} />'.format(
+                url=obj.image.url,
+                width=new_width,
+                height=200,
+            )
         )
 
 

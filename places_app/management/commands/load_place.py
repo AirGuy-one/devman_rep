@@ -17,7 +17,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         url_address = kwargs['json_file_address']
 
-        """ Here we create auxiliary folders """
+        # Here we create auxiliary folders
         if not os.path.isdir('static'):
             base_dir = Path(__file__).resolve().parent.parent.parent.parent
             os.chdir(base_dir)
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         r = requests.get(url_address)
         data = r.json()
 
-        """ Here we add the post to Post model """
+        # Here we add the post to Post model
         post = Post.objects.create(
             title=data['title'],
             description_short=data['description_short'],
@@ -41,7 +41,7 @@ class Command(BaseCommand):
             latitude=data['coordinates']['lat']
         )
 
-        """ Here we add the photos to Image model """
+        # Here we add the photos to Image model
         for i in data['imgs']:
             url = i
             title_of_image = f'{url[-10:-4]}_img_data.jpg'
@@ -52,7 +52,7 @@ class Command(BaseCommand):
 
             Images.objects.create(image=f'images/{title_of_image}', post=post)
 
-        """ Here we create json file in server folder """
+        # Here we create json file in server folder
         convert_file = {
             'title': post.title,
             'imgs': [

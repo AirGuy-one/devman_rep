@@ -13,7 +13,7 @@ def index(request):
     }
 
     for post in posts:
-        """ Here we writing json to html template """
+        # Here we're writing json to html template
         features_info = {
             "type": "Feature",
             "geometry": {
