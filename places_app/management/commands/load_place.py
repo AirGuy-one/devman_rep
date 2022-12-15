@@ -1,11 +1,9 @@
-import json
-import os
 import requests
-import shutil
 
-from pathlib import Path
+from hashlib import md5
 from django.core.management.base import BaseCommand
 from places_app.models import Post, Images
+from django.core.files.base import ContentFile
 
 
 class Command(BaseCommand):
@@ -34,9 +32,8 @@ class Command(BaseCommand):
         for i in response_place['imgs']:
             url = i
             title_of_image = f'{url[-10:-4]}_img_data.jpg'
-            response = requests.get(url, stream=True)
-            with open(f'media/images/{title_of_image}', 'wb') as out_file:
-                shutil.copyfileobj(response.raw, out_file)
-            del response
 
-            Images.objects.create(image=f'images/{title_of_image}', post=post)
+            response = requests.get(url, stream=True)
+
+            content_file = ContentFile(response.content, name=md5(response.content).hexdigest() + '.jpg')
+            Images.objects.create(image=content_file, post=post)
