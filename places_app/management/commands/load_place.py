@@ -17,32 +17,21 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         url_address = kwargs['json_file_address']
 
-        # Here we create auxiliary folders
-        if not os.path.isdir('static'):
-            base_dir = Path(__file__).resolve().parent.parent.parent.parent
-            os.chdir(base_dir)
-            os.mkdir('static')
-            os.mkdir('media')
-            os.chdir(os.path.join(base_dir, 'media'))
-            os.mkdir('images')
-            os.chdir(os.path.join(base_dir, 'load_static'))
-            os.mkdir('places')
-            os.chdir('..')
-
-        r = requests.get(url_address)
-        data = r.json()
+        response = requests.get(url_address)
+        response.raise_for_status()
+        response_place = response.json()
 
         # Here we add the post to Post model
         post = Post.objects.create(
-            title=data['title'],
-            description_short=data['description_short'],
-            description_long=data['description_long'],
-            longitude=data['coordinates']['lng'],
-            latitude=data['coordinates']['lat']
+            title=response_place['title'],
+            description_short=response_place['description_short'],
+            description_long=response_place['description_long'],
+            longitude=response_place['coordinates']['lng'],
+            latitude=response_place['coordinates']['lat']
         )
 
         # Here we add the photos to Image model
-        for i in data['imgs']:
+        for i in response_place['imgs']:
             url = i
             title_of_image = f'{url[-10:-4]}_img_data.jpg'
             response = requests.get(url, stream=True)
@@ -51,22 +40,3 @@ class Command(BaseCommand):
             del response
 
             Images.objects.create(image=f'images/{title_of_image}', post=post)
-
-        # Here we create json file in server folder
-        convert_file = {
-            'title': post.title,
-            'imgs': [
-                i.image.url for i in Post.objects.get(pk=post.id).images.all()
-            ],
-            'description_short': post.description_short,
-            'description_long': post.description_long,
-            'coordinates': {
-                "lng": post.longitude,
-                "lat": post.latitude
-            }
-        }
-
-        json_tmp = json.dumps(convert_file, indent=4, ensure_ascii=False)
-
-        with open(f'load_static/places/{post.id}_json_data.json', 'w') as f:
-            f.write(json_tmp)
