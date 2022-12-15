@@ -38,17 +38,22 @@ def index(request):
 
 
 def get_post_json(request, pk):
-
     post = get_object_or_404(Post, pk=pk)
 
-    post_info = {'title': post.title,
-                 'imgs': [i.image.url for i in Post.objects.get(pk=pk).images.all()],
-                 'description_short': post.description_short,
-                 'description_long': post.description_long,
-                 'coordinates': {
-                     "lng": post.longitude,
-                     "lat": post.latitude
-                 }
-                 }
+    post_info = {
+        'title': post.title,
+        'imgs': [
+            i.image.url for i in Post.objects.get(pk=pk).images.all()
+        ],
+        'description_short': post.description_short,
+        'description_long': post.description_long,
+        'coordinates': {
+            "lng": post.longitude,
+            "lat": post.latitude
+        }
+    }
 
-    return JsonResponse(post_info, json_dumps_params={'ensure_ascii': False, 'indent': 2})
+    return JsonResponse(
+        post_info,
+        json_dumps_params={'ensure_ascii': False, 'indent': 2}
+    )
