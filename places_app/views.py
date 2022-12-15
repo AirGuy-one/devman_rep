@@ -5,14 +5,12 @@ from .models import Post
 
 
 def index(request):
-    posts = Post.objects.all()
-
     places_info = {
         "type": "FeatureCollection",
         "features": []
     }
 
-    for post in posts:
+    for post in Post.objects.all():
         # Here we're writing json to html template
         features_info = {
             "type": "Feature",
@@ -30,7 +28,6 @@ def index(request):
         places_info['features'].append(features_info)
 
     context = {
-        'posts': posts,
         'places_info': places_info,
     }
 
@@ -43,7 +40,7 @@ def get_post_json(request, pk):
     post_info = {
         'title': post.title,
         'imgs': [
-            i.image.url for i in Post.objects.get(pk=pk).images.all()
+            image.image.url for image in post.images.all()
         ],
         'description_short': post.description_short,
         'description_long': post.description_long,
