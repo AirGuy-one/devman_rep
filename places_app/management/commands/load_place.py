@@ -29,11 +29,9 @@ class Command(BaseCommand):
         )
 
         # Here we add the photos to Image model
-        for i in response_place['imgs']:
-            url = i
-            title_of_image = f'{url[-10:-4]}_img_data.jpg'
+        for url in response_place['imgs']:
 
             response = requests.get(url, stream=True)
 
-            content_file = ContentFile(response.content, name=md5(response.content).hexdigest() + '.jpg')
+            content_file = ContentFile(response.content, name=md5(response.content).hexdigest())
             Images.objects.create(image=content_file, post=post)
