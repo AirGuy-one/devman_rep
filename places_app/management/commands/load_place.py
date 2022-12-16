@@ -20,7 +20,7 @@ class Command(BaseCommand):
         response_place = response.json()
 
         # Here we add the post to Post model
-        post = Post.objects.create(
+        post, created = Post.objects.get_or_create(
             title=response_place['title'],
             description_short=response_place['description_short'],
             description_long=response_place['description_long'],
@@ -30,8 +30,7 @@ class Command(BaseCommand):
 
         # Here we add the photos to Image model
         for url in response_place['imgs']:
-
             response = requests.get(url, stream=True)
 
             content_file = ContentFile(response.content, name=md5(response.content).hexdigest())
-            Images.objects.create(image=content_file, post=post)
+            Images.objects.get_or_create(image=content_file, post=post)
