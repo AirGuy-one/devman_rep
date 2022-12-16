@@ -1,5 +1,3 @@
-import json
-
 import requests
 
 from hashlib import md5
@@ -34,5 +32,8 @@ class Command(BaseCommand):
         for url in response_place.get('imgs', []):
             response = requests.get(url, stream=True)
 
-            content_file = ContentFile(response.content, name=md5(response.content).hexdigest())
+            content_file = ContentFile(
+                response.content,
+                name=md5(response.content).hexdigest()
+            )
             Images.objects.get_or_create(image=content_file, post=post)
