@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 from hashlib import md5
@@ -22,14 +24,14 @@ class Command(BaseCommand):
         # Here we add the post to Post model
         post, created = Post.objects.get_or_create(
             title=response_place['title'],
-            description_short=response_place['description_short'],
-            description_long=response_place['description_long'],
+            description_short=response_place.get('description_short', ''),
+            description_long=response_place.get('description_long', ''),
             longitude=response_place['coordinates']['lng'],
             latitude=response_place['coordinates']['lat']
         )
 
         # Here we add the photos to Image model
-        for url in response_place['imgs']:
+        for url in response_place.get('imgs', []):
             response = requests.get(url, stream=True)
 
             content_file = ContentFile(response.content, name=md5(response.content).hexdigest())
