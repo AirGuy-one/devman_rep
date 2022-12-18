@@ -17,23 +17,24 @@ class Command(BaseCommand):
 
         response = requests.get(url_address)
         response.raise_for_status()
-        response_place = response.json()
+        place_content = response.json()
 
-        # Here we add the post to Post model
-        post, created = Post.objects.get_or_create(
-            title=response_place['title'],
-            description_short=response_place.get('description_short', ''),
-            description_long=response_place.get('description_long', ''),
-            longitude=response_place['coordinates']['lng'],
-            latitude=response_place['coordinates']['lat']
-        )
+        # Here we add the place to Post model
+        place, created = Post.objects.get_or_create(
+            title=place_content['title'],
+            defaults={
+                'description_short': place_content['description_short'],
+                'description_long': place_content['description_long'],
+                'lat': place_content['coordinates']['lat'],
+                'lng': place_content['coordinates']['lng'],
+            })
 
         # Here we add the photos to Image model
-        for url in response_place.get('imgs', []):
+        for url in place_content.get('imgs', []):
             response = requests.get(url, stream=True)
 
             content_file = ContentFile(
                 response.content,
                 name=md5(response.content).hexdigest()
             )
-            Images.objects.get_or_create(image=content_file, post=post)
+            Images.objects.get_or_create(image=content_file, post=place)
