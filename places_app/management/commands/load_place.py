@@ -25,8 +25,8 @@ class Command(BaseCommand):
             defaults={
                 'description_short': place_content['description_short'],
                 'description_long': place_content['description_long'],
-                'lat': place_content['coordinates']['lat'],
-                'lng': place_content['coordinates']['lng'],
+                'latitude': place_content['coordinates']['lat'],
+                'longitude': place_content['coordinates']['lng'],
             })
 
         # Here we add the photos to Image model
