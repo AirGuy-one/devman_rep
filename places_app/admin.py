@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from adminsortable2.admin import SortableAdminMixin, SortableTabularInline
+from adminsortable2.admin import SortableAdminMixin, SortableTabularInline, SortableAdminBase
 from .models import Post, Images
 
 
@@ -8,7 +8,7 @@ class ImagesAdmin(SortableAdminMixin, admin.ModelAdmin):
     model = Images
     extra = 0
     list_display = ('number', 'id', 'display_image_field', 'post')
-    ordering = ('number', )
+    ordering = ('number',)
 
     def display_image_field(self, obj):
         new_width = 200 * obj.image.width / obj.image.height
@@ -23,7 +23,6 @@ class ImagesAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 
 class ImagesInline(SortableTabularInline):
-
     model = Images
 
     readonly_fields = ["display_image_field", ]
@@ -40,11 +39,10 @@ class ImagesInline(SortableTabularInline):
         )
 
 
-class PostAdmin(SortableAdminMixin, admin.ModelAdmin):
-
-    inlines = [
+class PostAdmin(SortableAdminBase, admin.ModelAdmin):
+    inlines = (
         ImagesInline,
-    ]
+    )
 
 
 admin.site.register(Post, PostAdmin)
