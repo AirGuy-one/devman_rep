@@ -23,18 +23,18 @@ class Command(BaseCommand):
         place, created = Post.objects.get_or_create(
             title=place_content['title'],
             defaults={
-                'description_short': place_content['description_short'],
-                'description_long': place_content['description_long'],
+                'description_short': place_content.get('description_short', ''),
+                'description_long': place_content.get('description_long', ''),
                 'latitude': place_content['coordinates']['lat'],
                 'longitude': place_content['coordinates']['lng'],
             })
 
         # Here we add the photos to Image model
         for url in place_content.get('imgs', []):
-            response = requests.get(url, stream=True)
+            with requests.get(url, stream=True) as response:
+                content_file = ContentFile(
+                    response.content,
+                    name=md5(response.content).hexdigest()
+                )
+                Images.objects.get_or_create(image=content_file, post=place)
 
-            content_file = ContentFile(
-                response.content,
-                name=md5(response.content).hexdigest()
-            )
-            Images.objects.get_or_create(image=content_file, post=place)
